@@ -2,44 +2,46 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-if __name__ == '__main__':
+def main():
 
-	excelDataT120 = pd.read_excel(
-		open('RealValue.xlsx','rb'), 
-		sheetname='Sheet2', 
-		skiprows = range(1, 2))
+	excelDataZn = pd.read_excel(
+		open('Flows.xlsx','rb'), 
+		sheetname='Flows', 
+		parse_dates=['Timestamp'])
 	excelDataT361 = pd.read_excel(
 		open('RealValueT361.xlsx','rb'), 
 		sheetname='Sheet1', 
-		skiprows = range(1, 2))
-	excelDataT595 = pd.read_excel(
-		open('RealValueT595.xlsx','rb'), 
-		sheetname='Sheet1', 
-		skiprows = range(1, 2))
+		skiprows = range(1, 3),
+		parse_dates=['time'])
 
-	timeT120Data = pd.to_datetime(excelDataT120["time"], errors='coerce')
-	t120Data = pd.to_numeric(excelDataT120["value"], errors='coerce')
+	maskZn = (excelDataZn['Timestamp'] > pd.Timestamp('2017-2-10')) & (excelDataZn['Timestamp'] <= pd.Timestamp('2017-2-17'))
 	timeT361Data = pd.to_datetime(excelDataT361["time"], errors='coerce')
-	t361Data = pd.to_numeric(excelDataT361["value"], errors='coerce')
-	timeT595Data = pd.to_datetime(excelDataT595["time"], errors='coerce')
-	t595Data = pd.to_numeric(excelDataT595["value"], errors='coerce')
+	maskT361 = (timeT361Data > pd.Timestamp('2017-2-10')) & (timeT361Data <= pd.Timestamp('2017-2-17'))
+
+	filteredExcelDataZn = excelDataZn.loc[maskZn]
+	filteredExcelDataT361 = excelDataT361.loc[maskT361]
+
+	timeZnData = pd.to_datetime(filteredExcelDataZn["Timestamp"], errors='coerce')
+	znData = pd.to_numeric(filteredExcelDataZn["Zn Rougher 2 Con Flow"], errors='coerce')
+	timeT361Data = pd.to_datetime(filteredExcelDataT361["time"], errors='coerce')
+	t361Data = pd.to_numeric(filteredExcelDataT361["value"], errors='coerce')
 
 	plt.figure()
-	ax = plt.subplot(311)
-	lineT120, = plt.plot(timeT120Data, t120Data, color='k', label="Cell 01")
+	plt.subplot(211)
+	lineZn, = plt.plot(timeZnData, znData, color='k', label="Zn Rougher 2 Con Flow")
 
-	plt.subplot(312)
-	lineT361, = plt.plot(timeT361Data, t361Data, color='b', label="Cell 03")
-
-	plt.subplot(313)
-	lineT595, = plt.plot(timeT595Data, t595Data, color='r', label="Cell 05")
+	plt.subplot(212)
+	lineT361, = plt.plot(timeT361Data, t361Data, color='b', label="Cell 03 RGB color")
 	
-	# plt.subplot(311)
+	plt.subplot(211)
 	# plt.legend(handles=[lineT120, lineT361, lineT595], loc = 0)
 
 	# Put a legend below current axis
-	ax.legend(loc='upper right', handles=[lineT120, lineT361, lineT595])
+	plt.legend(loc='upper right', handles=[lineZn, lineT361])
 
-	plt.savefig("testT120A361A595II.png")
+	plt.savefig("testZnA361.png")
 	plt.show()
+
+if __name__ == '__main__': 
+    main()
 
