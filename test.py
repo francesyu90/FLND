@@ -4,44 +4,37 @@ import matplotlib.pyplot as plt
 
 def main():
 
-	excelDataT117 = pd.read_excel(
-		open('FilteredRealValueT117.xlsx','rb'), 
-		sheetname='Sheet1', 
-		skiprows = range(1, 3),
-		parse_dates=['time'])
-	excelDataT61 = pd.read_excel(
-		open('FilteredRealValueT61.xlsx','rb'), 
-		sheetname='Sheet1', 
-		skiprows = range(1, 3),
-		parse_dates=['time'])
-	excelDataT60 = pd.read_excel(
-		open('FilteredRealValueT60.xlsx','rb'), 
-		sheetname='Sheet1', 
-		skiprows = range(1, 3),
-		parse_dates=['time'])
+	excelDataAssays = pd.read_excel(
+		open('Assays.xlsx','rb'), 
+		sheetname='Assays', 
+		parse_dates=['Timestamp'])
 
-	timeData = pd.to_datetime(excelDataT117["time"], errors='coerce')
-	rvT117Data = pd.to_numeric(excelDataT117["value"], errors='coerce')
-	rvT61Data = pd.to_numeric(excelDataT61["value"], errors='coerce')
-	rvT60Data = pd.to_numeric(excelDataT60["value"], errors='coerce')
+	timeAData = pd.to_datetime(excelDataAssays["Timestamp"], errors='coerce')
+	maskA = (timeAData > pd.Timestamp('2017-2-10')) & (timeAData <= pd.Timestamp('2017-2-17'))
+	filteredExcelDataAssays = excelDataAssays.loc[maskA]
+
+	timeData = pd.to_datetime(filteredExcelDataAssays["Timestamp"], errors='coerce')
+	z2RCData = pd.to_numeric(filteredExcelDataAssays["Z2RC Zn"], errors='coerce')
+	z1RCData = pd.to_numeric(filteredExcelDataAssays["Z1RC Zn"], errors='coerce')
+	zrCCData = pd.to_numeric(filteredExcelDataAssays["ZRCC Zn"], errors='coerce')
 
 	plt.figure()
 	plt.subplot(311)
-	lineT60, = plt.plot(timeData, rvT60Data, color='b', label="T60")
+	lineZ2RCZn, = plt.plot(timeData, z2RCData, color='b', label="Z2RC Zn")
 
 	plt.subplot(312)
-	lineT61, = plt.plot(timeData, rvT61Data, color='k', label="T61")
+	lineZ1RCZn, = plt.plot(timeData, z1RCData, color='k', label="Z1RC Zn")
 
 	plt.subplot(313)
-	lineT117, = plt.plot(timeData, rvT117Data, color='r', label="T117")
+	lineZRCCZn, = plt.plot(timeData, zrCCData, color='r', label="ZRCC Zn")
 
 	plt.xlabel('Timestamp')
 	# plt.ylabel('T61 RowA.Cell01.VisioFroth.Cell01.YVelocity')
 	# plt.title('')
 	# plt.grid(True)
 	plt.subplot(311)
-	plt.legend(loc='upper right', handles=[lineT60, lineT61, lineT117])
-	plt.savefig("timeVsT60AT61T117.png")
+	plt.legend(loc='upper right', handles=[lineZ2RCZn, lineZ1RCZn, lineZRCCZn])
+	plt.savefig("z2RCAZ1RCAZRCCI.png")
 	plt.show()
 
 if __name__ == '__main__': 
