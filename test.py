@@ -22,13 +22,13 @@ def main():
 	filteredExcelDataT361 = excelDataT361.loc[maskT361]
 
 	timeZnData = pd.to_datetime(filteredExcelDataZn["Timestamp"], errors='coerce')
-	znData = pd.to_numeric(filteredExcelDataZn["SAG2"], errors='coerce')
+	znData = pd.to_numeric(filteredExcelDataZn["SAG3"], errors='coerce')
 	timeT361Data = pd.to_datetime(filteredExcelDataT361["time"], errors='coerce')
 	t361Data = pd.to_numeric(filteredExcelDataT361["value"], errors='coerce')
 
 	plt.figure()
 	plt.subplot(211)
-	lineZn, = plt.plot(timeZnData, znData, color='k', label="SAG2")
+	lineZn, = plt.plot(timeZnData, znData, color='k', label="SAG3")
 
 	plt.subplot(212)
 	lineT361, = plt.plot(timeT361Data, t361Data, color='b', label="Cell 03 RGB color")
@@ -39,7 +39,7 @@ def main():
 	# Put a legend below current axis
 	plt.legend(loc='upper right', handles=[lineZn, lineT361])
 
-	plt.savefig("sag2A361.png")
+	plt.savefig("sag3A361.png")
 	plt.show()
 
 if __name__ == '__main__': 
