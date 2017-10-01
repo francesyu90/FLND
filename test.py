@@ -4,27 +4,27 @@ import matplotlib.pyplot as plt
 
 def main():
 
-	excelDataT592 = pd.read_excel(
-		open('FilteredRealValueT592.xlsx','rb'), 
+	excelDataT535 = pd.read_excel(
+		open('FilteredRealValueT535.xlsx','rb'), 
 		sheetname='Sheet1', 
 		skiprows = range(1, 3),
 		parse_dates=['time'])
-	excelDataT595 = pd.read_excel(
-		open('FilteredRealValueT595.xlsx','rb'), 
+	excelDataT536 = pd.read_excel(
+		open('FilteredRealValueT536.xlsx','rb'), 
 		sheetname='Sheet1', 
 		skiprows = range(1, 3),
 		parse_dates=['time'])
 
-	rvT592Data = pd.to_numeric(excelDataT592["value"], errors='coerce')
-	rvT595Data = pd.to_numeric(excelDataT595["value"], errors='coerce')
+	rvT535Data = pd.to_numeric(excelDataT535["value"], errors='coerce')
+	rvT536Data = pd.to_numeric(excelDataT536["value"], errors='coerce')
 
-	plt.plot(rvT592Data, rvT595Data, 'r^')
+	plt.plot(rvT535Data, rvT536Data, 'r^')
 
-	plt.xlabel('T592 RowA.Cell05.VisioFroth.Cell05.LAB_Luminance')
-	plt.ylabel('T595 RowA.Cell05.VisioFroth.Cell05.RGBColor')
-	plt.title('T592 Vs T595')
+	plt.xlabel('T535 RowA.Cell05.VisioFroth.Cell05.XVelocity')
+	plt.ylabel('T536 RowA.Cell05.VisioFroth.Cell05.YVelocity')
+	plt.title('T535 Vs T536')
 	plt.grid(True)
-	plt.savefig("T592VsT595.png")
+	plt.savefig("T535VsT536.png")
 	plt.show()
 
 if __name__ == '__main__': 
