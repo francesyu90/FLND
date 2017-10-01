@@ -4,37 +4,27 @@ import matplotlib.pyplot as plt
 
 def main():
 
-	excelDataAssays = pd.read_excel(
-		open('Assays.xlsx','rb'), 
-		sheetname='Assays', 
-		parse_dates=['Timestamp'])
+	excelDataT358 = pd.read_excel(
+		open('FilteredRealValueT358.xlsx','rb'), 
+		sheetname='Sheet1', 
+		skiprows = range(1, 3),
+		parse_dates=['time'])
+	excelDataT361 = pd.read_excel(
+		open('FilteredRealValueT361.xlsx','rb'), 
+		sheetname='Sheet1', 
+		skiprows = range(1, 3),
+		parse_dates=['time'])
 
-	timeAData = pd.to_datetime(excelDataAssays["Timestamp"], errors='coerce')
-	maskA = (timeAData > pd.Timestamp('2017-2-10')) & (timeAData <= pd.Timestamp('2017-2-17'))
-	filteredExcelDataAssays = excelDataAssays.loc[maskA]
+	rvT358Data = pd.to_numeric(excelDataT358["value"], errors='coerce')
+	rvT361Data = pd.to_numeric(excelDataT361["value"], errors='coerce')
 
-	timeData = pd.to_datetime(filteredExcelDataAssays["Timestamp"], errors='coerce')
-	z2RCData = pd.to_numeric(filteredExcelDataAssays["Z2RC Zn"], errors='coerce')
-	z1RCData = pd.to_numeric(filteredExcelDataAssays["Z1RC Zn"], errors='coerce')
-	zrCCData = pd.to_numeric(filteredExcelDataAssays["ZRCC Zn"], errors='coerce')
+	plt.plot(rvT358Data, rvT361Data, 'r^')
 
-	plt.figure()
-	plt.subplot(311)
-	lineZ2RCZn, = plt.plot(timeData, z2RCData, color='b', label="Z2RC Zn")
-
-	plt.subplot(312)
-	lineZ1RCZn, = plt.plot(timeData, z1RCData, color='k', label="Z1RC Zn")
-
-	plt.subplot(313)
-	lineZRCCZn, = plt.plot(timeData, zrCCData, color='r', label="ZRCC Zn")
-
-	plt.xlabel('Timestamp')
-	# plt.ylabel('T61 RowA.Cell01.VisioFroth.Cell01.YVelocity')
-	# plt.title('')
-	# plt.grid(True)
-	plt.subplot(311)
-	plt.legend(loc='upper right', handles=[lineZ2RCZn, lineZ1RCZn, lineZRCCZn])
-	plt.savefig("z2RCAZ1RCAZRCCI.png")
+	plt.xlabel('T358 RowA.Cell03.VisioFroth.Cell03.LAB_Luminance')
+	plt.ylabel('T361 RowA.Cell03.VisioFroth.Cell03.RGBColor')
+	plt.title('T358 Vs T361')
+	plt.grid(True)
+	plt.savefig("T358VsT361.png")
 	plt.show()
 
 if __name__ == '__main__': 
