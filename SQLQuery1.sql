@@ -11,7 +11,7 @@
 SELECT * 
 FROM DBO.RealValue RV 
 WHERE CAST(RV.time AS date) BETWEEN '2/10/2017' and '2/17/2017'
-AND RV.tag_id = '361';
+AND RV.tag_id = '595';
 
 
 -- 
